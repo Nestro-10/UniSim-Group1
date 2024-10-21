@@ -1,0 +1,63 @@
+@startuml
+class GameManager {
+    time : float
+    isPaused : bool
+    isTermTime : bool
+    satisfactionBar : SatisfactionBar
+    currentEvent : Event
+    buildings : Array<BuildingSlot>
+    Pause(bool) : void
+    Update() : void
+}
+
+class SatisfactionBar {
+    value : float
+    target : float
+    base : float
+    changeRate : float
+    -thoughts : Dictionary<int, Thought>
+    GetThought(int) : Thought
+    SetThought(int, Though) : void
+}
+note left of SatisfactionBar::GetThought
+    get and set thought update target
+endnote
+
+class Thought {
+    title : string
+    description : string
+    modification : float
+}
+
+class BuildingSlot {
+    building : Building
+    position : Vector2
+    maxSize : int
+    Draw() : void
+    Build(Building) : void
+}
+
+enum BuildingType {
+    Accomodation
+    TeachingSpace
+    SelfStudy
+    FoodDrink
+}
+
+class Building {
+    name : string
+    types: Array<BuildingType>
+    buildTime : int
+    size : int
+    isbuilding : bool
+    sprite : Texture
+    upgrade : Building
+}
+
+abstract Event {
+    duration : int
+    Start() : void
+    Update() : void
+    End() : void
+}
+@enduml
