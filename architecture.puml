@@ -3,9 +3,7 @@ class GameManager {
     time : float
     isPaused : bool
     isTermTime : bool
-    satisfactionBar : SatisfactionBar
     currentEvent : Event
-    buildings : Array<BuildingSlot>
     Pause(bool) : void
     Update() : void
 }
@@ -15,13 +13,10 @@ class SatisfactionBar {
     target : float
     base : float
     changeRate : float
-    -thoughts : Dictionary<int, Thought>
     GetThought(int) : Thought
-    SetThought(int, Though) : void
+    AddThought(Thought) : int
+    RemoveThought(int) : void
 }
-note left of SatisfactionBar::GetThought
-    get and set thought update target
-endnote
 
 class Thought {
     title : string
@@ -30,14 +25,17 @@ class Thought {
 }
 
 class BuildingSlot {
-    building : Building
+    timeConstructing : int
+    isConstructionActive : bool
     position : Vector2
     maxSize : int
-    Draw() : void
+    Update() : void
     Build(Building) : void
+    Upgrade() : void
+    Demolish() : void
 }
 
-enum BuildingType {
+enum Service {
     Accomodation
     TeachingSpace
     SelfStudy
@@ -46,12 +44,10 @@ enum BuildingType {
 
 class Building {
     name : string
-    types: Array<BuildingType>
-    buildTime : int
+    servicesProvided: Array<Service>
+    constructionTime : int
     size : int
-    isbuilding : bool
     sprite : Texture
-    upgrade : Building
 }
 
 abstract Event {
@@ -60,4 +56,19 @@ abstract Event {
     Update() : void
     End() : void
 }
+
+class ContentLoader {
+    Load() : void
+}
+
+GameManager -- "Contains" ContentLoader
+GameManager -- "Contains" SatisfactionBar
+SatisfactionBar -- "Contains" Thought
+GameManager -- "Creates" Event
+GameManager -- "Contains multiple" BuildingSlot
+ContentLoader -- "Creates and contains multiple\n" Building
+ContentLoader -- "Creates and contains multiple" Thought
+BuildingSlot -- "     References" Building
+Event -- "Creates\n\n" Thought
+GameManager -- "Creates\n" Thought
 @enduml
