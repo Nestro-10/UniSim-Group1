@@ -13,10 +13,11 @@ public class SatisfactionBar {
 
     private float satisfactionScore;
     private float target;
-    private float speed = 0.03f;
-    private Map<String, Thought> thoughts;
-    private ShapeRenderer background;
-    private ShapeRenderer fill;
+    private final float baseValue = 50;
+    private final float speed = 0.03f;
+    private final Map<String, Thought> thoughts;
+    private final ShapeRenderer background;
+    private final ShapeRenderer fill;
 
     public SatisfactionBar(){
         background = new ShapeRenderer();
@@ -26,7 +27,7 @@ public class SatisfactionBar {
     }
 
     private void resetScore(){
-        satisfactionScore = 50;
+        satisfactionScore = baseValue;
     }
 
     public float getScore(){
@@ -57,7 +58,7 @@ public class SatisfactionBar {
     }
 
     private void calculateTarget(){
-        target = 50;
+        target = baseValue;
 
         for (String key : thoughts.keySet()) {
             target += thoughts.get(key).modification;
