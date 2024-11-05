@@ -6,10 +6,10 @@ public class SatisfactionBar {
     private int satisfactionScore;
     
     public SatisfactionBar(){
-        setScore();
+        resetScore();
     }
 
-    private void setScore(){
+    private void resetScore(){
         satisfactionScore = 50;
     }
 
