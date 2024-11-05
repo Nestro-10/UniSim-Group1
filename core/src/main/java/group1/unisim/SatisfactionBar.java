@@ -1,6 +1,9 @@
 package group1.unisim;
 
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +15,12 @@ public class SatisfactionBar {
     private float target;
     private float speed = 0.03f;
     private Map<String, Thought> thoughts;
+    private ShapeRenderer background;
+    private ShapeRenderer fill;
 
     public SatisfactionBar(){
+        background = new ShapeRenderer();
+        fill = new ShapeRenderer();
         resetScore();
         thoughts = new HashMap<>();
     }
@@ -57,5 +64,34 @@ public class SatisfactionBar {
         }
 
         target = max(min(target, 0), 100);
+    }
+
+    public void render(){
+        //Draw satisfactionBar Rectangle
+        background.begin(ShapeRenderer.ShapeType.Filled);
+        background.setColor(Color.GRAY);
+        background.rect(775, 735, 200, 50);
+
+        //Initialise score bar
+
+        fill.begin(ShapeRenderer.ShapeType.Filled);
+        if (satisfactionScore < 31){
+            fill.setColor(Color.RED);
+        }
+        else if (satisfactionScore < 61){
+            fill.setColor(Color.YELLOW);
+        }
+        else{
+            fill.setColor(Color.GREEN);
+        }
+        fill.rect(775, 735, (satisfactionScore) * 2, 50);
+
+        background.end();
+        fill.end();
+    }
+
+    public void dispose(){
+        background.dispose();
+        fill.dispose();
     }
 }
