@@ -17,7 +17,8 @@ public class Main extends ApplicationAdapter {
     private Texture mapTexture;
     private Texture settingsTexture;
     private Texture buildIconTexture;
-
+    private float updateTimer;
+    private final float updateTime = 1/30f; // 30 updates/second
 
     @Override
     public void create() {
@@ -31,6 +32,15 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
+        updateTimer += deltaTime;
+
+        while (updateTimer > updateTime) { // in case of a long freeze, able to do multiple updates
+            update();
+            updateTimer -= updateTime;
+        }
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
         batch.draw(mapTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
@@ -38,6 +48,10 @@ public class Main extends ApplicationAdapter {
         batch.draw(settingsTexture, 0, 1425, 70, 70);
         batch.draw(buildIconTexture, 70, 1430, 60, 55 );
         batch.end();
+    }
+
+    private void update() {
+
     }
 
     @Override
