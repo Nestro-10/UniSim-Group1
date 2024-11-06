@@ -55,7 +55,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void update() {
-
+        satisfactionBar.updateScore();
     }
 
     @Override
