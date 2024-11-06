@@ -17,6 +17,8 @@ public class Main extends ApplicationAdapter {
     private Texture settingsTexture;
     private Texture buildIconTexture;
     private SatisfactionBar satisfactionBar;
+    private float updateTimer;
+    private final float updateTime = 1/30f; // 30 updates/second
 
     @Override
     public void create() {
@@ -31,6 +33,14 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void render() {
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
+        updateTimer += deltaTime;
+
+        while (updateTimer > updateTime) { // in case of a long freeze, able to do multiple updates
+            update();
+            updateTimer -= updateTime;
+        }
 
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
@@ -42,6 +52,10 @@ public class Main extends ApplicationAdapter {
         satisfactionBar.render();
 
         batch.end();
+    }
+
+    private void update() {
+
     }
 
     @Override
