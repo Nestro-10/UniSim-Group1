@@ -3,25 +3,25 @@ package group1.unisim;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.*;
 
-public class SatisfactionBar {
+public class SatisfactionBar extends ProgressBar {
 
     private float satisfactionScore;
     private float target;
     private final float baseValue = 50;
     private final float speed = 0.03f;
     private final Map<String, Thought> thoughts;
-    private final ShapeRenderer background;
-    private final ShapeRenderer fill;
 
-    public SatisfactionBar(){
-        background = new ShapeRenderer();
-        fill = new ShapeRenderer();
+    public SatisfactionBar(Skin skin){
+        super(0.0f, 100.0f, 0.1f, false, skin);
+        setSize(200, 50);
         resetScore();
         thoughts = new HashMap<>();
     }
@@ -40,6 +40,16 @@ public class SatisfactionBar {
         else {
             float direction = (difference < 0) ? -1 : 1;
             satisfactionScore += speed * direction;
+        }
+        setValue(satisfactionScore);
+        if (satisfactionScore < 31){
+            setColor(Color.RED);
+        }
+        else if (satisfactionScore < 61){
+            setColor(Color.YELLOW);
+        }
+        else{
+            setColor(Color.GREEN);
         }
     }
 
@@ -65,34 +75,5 @@ public class SatisfactionBar {
         }
 
         target = max(min(target, 0), 100);
-    }
-
-    public void render(){
-        //Draw satisfactionBar Rectangle
-        background.begin(ShapeRenderer.ShapeType.Filled);
-        background.setColor(Color.GRAY);
-        background.rect(775, 735, 200, 50);
-
-        //Initialise score bar
-
-        fill.begin(ShapeRenderer.ShapeType.Filled);
-        if (satisfactionScore < 31){
-            fill.setColor(Color.RED);
-        }
-        else if (satisfactionScore < 61){
-            fill.setColor(Color.YELLOW);
-        }
-        else{
-            fill.setColor(Color.GREEN);
-        }
-        fill.rect(775, 735, (satisfactionScore) * 2, 50);
-
-        background.end();
-        fill.end();
-    }
-
-    public void dispose(){
-        background.dispose();
-        fill.dispose();
     }
 }

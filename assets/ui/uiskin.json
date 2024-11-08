@@ -308,7 +308,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
         selection: { name: dot, color: selection },
         list: { name: rect, color: background },
         progressHorizontal: { name: line-v, color: up },
-        progressHorizontalKnob: { name: line-v, color: down },
+        progressHorizontalKnob: { name: line-v, color: white },
         progressHorizontalDisabled: { name: line-v, color: disabled },
         progressHorizontalKnobDisabled: { name: line-v, color: disabled },
         progressVertical: { name: line-h, color: up },
