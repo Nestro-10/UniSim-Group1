@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -21,9 +22,12 @@ public class Main extends ApplicationAdapter {
     private SatisfactionBar satisfactionBar;
     private float updateTimer;
     private final float updateTime = 1/30f; // 30 updates/second
+    private boolean isPaused = true;
+    private float gameTimer = 300;
 
     //UI
     private Stage stage;
+    private Label gameTimeText;
 
     @Override
     public void create() {
@@ -38,6 +42,13 @@ public class Main extends ApplicationAdapter {
         satisfactionBar = new SatisfactionBar(skin);
         satisfactionBar.setPosition(775, 735);
         stage.addActor(satisfactionBar);
+
+        gameTimeText = new Label("5:00", skin);
+        gameTimeText.setPosition(400, 735);
+        gameTimeText.setSize(200, 50);
+        gameTimeText.setFontScale(4);
+        gameTimeText.setAlignment(1);
+        stage.addActor(gameTimeText);
     }
 
     @Override
@@ -45,6 +56,10 @@ public class Main extends ApplicationAdapter {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         updateTimer += deltaTime;
+        if (!isPaused) {
+            gameTimer -= deltaTime;
+            updateGameTimeText((int)gameTimer);
+        }
 
         while (updateTimer > updateTime) { // in case of a long freeze, able to do multiple updates
             update();
@@ -66,7 +81,12 @@ public class Main extends ApplicationAdapter {
     }
 
     private void update() {
+        if (isPaused) return;
         satisfactionBar.updateScore();
+    }
+
+    private void updateGameTimeText(int seconds) {
+        gameTimeText.setText(String.format("%d:%02d", (seconds / 60), (seconds % 60)));
     }
 
     @Override
