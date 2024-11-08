@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -16,6 +17,12 @@ public class Main extends ApplicationAdapter {
     private Texture mapTexture;
     private Texture settingsTexture;
     private Texture buildIconTexture;
+    private Texture accomodationTexture;
+    private Texture cafe;
+    private Texture library;
+    private Building accom;
+    private Building foodDrink;
+    private Building studyArea;
     private SatisfactionBar satisfactionBar;
     private float updateTimer;
     private final float updateTime = 1/30f; // 30 updates/second
@@ -28,7 +35,18 @@ public class Main extends ApplicationAdapter {
         mapTexture = new Texture("mapTexture.png");
         settingsTexture = new Texture("settingsIcon.png");
         buildIconTexture = new Texture("buildIcon.png");
+        accomodationTexture = new Texture("accom.png");
+        cafe = new Texture("cafe.png");
+        library = new Texture("library.png");
+
+        
+
+        accom = new Building();
+        foodDrink = new Building();
+        studyArea = new Building();
+
         satisfactionBar = new SatisfactionBar();
+
     }
 
     @Override
@@ -47,8 +65,8 @@ public class Main extends ApplicationAdapter {
         batch.draw(mapTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
         batch.draw(toolbar, 0, 720, Gdx.graphics.getWidth(), 80);
         batch.draw(settingsTexture, 0, 720, 70, 70);
-        batch.draw(buildIconTexture, 70, 730, 60, 55 );
 
+        accom.render("accomodation", 10, 1, accomodationTexture, batch);
         satisfactionBar.render();
 
         batch.end();
