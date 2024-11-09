@@ -56,9 +56,7 @@ public class Main extends ApplicationAdapter {
         buildIconTexture = new Texture("buildIcon.png");
         stage = new Stage();
 
-        satisfactionBar = new SatisfactionBar(skin);
-        satisfactionBar.setPosition(775, 735);
-        stage.addActor(satisfactionBar);
+        satisfactionBar = new SatisfactionBar(skin, stage);
 
         gameTimeText = new Label("5:00", skin);
         gameTimeText.setPosition(400, 735);

@@ -1,10 +1,17 @@
 package group1.unisim;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,12 +25,18 @@ public class SatisfactionBar extends ProgressBar {
     private final float baseValue = 50;
     private final float speed = 0.03f;
     private final Map<String, Thought> thoughts;
+    private final Image targetMarker;
 
-    public SatisfactionBar(Skin skin){
+    public SatisfactionBar(Skin skin, Stage stage){
         super(0.0f, 100.0f, 0.1f, false, skin);
         setSize(200, 50);
         resetScore();
         thoughts = new HashMap<>();
+        targetMarker = new Image(new Texture("triangle.png"));
+        setPosition(775, 735);
+        targetMarker.setPosition(760, 730);
+        stage.addActor(this);
+        stage.addActor(targetMarker);
     }
 
     private void resetScore(){
@@ -71,9 +84,11 @@ public class SatisfactionBar extends ProgressBar {
         target = baseValue;
 
         for (String key : thoughts.keySet()) {
-            target += thoughts.get(key).modification;
+            target += thoughts.get(key).getModification();
         }
 
-        target = max(min(target, 0), 100);
+        target = min(max(target, 0), 100);
+
+        targetMarker.setPosition(760 + target * 2, 730);
     }
 }
