@@ -3,10 +3,10 @@ package group1.unisim;
 import com.badlogic.gdx.math.Vector2;
 
 public class BuildingSlot {
-    public int timeConstructing;
-    public boolean isConstructingActive;
-    public Vector2 position;
-    public int maxSize;
+    private int timeConstructing;
+    private boolean isConstructingActive;
+    private Vector2 position;
+    private int maxSize;
 
     public void setIsContructing(){
         isConstructingActive = false;

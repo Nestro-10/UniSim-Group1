@@ -1,41 +1,40 @@
 package group1.unisim;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Building {
 
-    public String name;
-    public Service[] servicesProvided;
-    public int constructionTime;
-    public int size;
-    public Texture sprite;
+    private String name;
+    private Service[] servicesProvided;
+    private int constructionTime;
+    private int size;
+    private Texture sprite;
 
-    public Building(){
-
-    }
-
-    public void setName(String buildingName){
+    public Building(String buildingName, Service[] services, int timeConstruction, int buildingSize, Texture buildingTexture){
         name = buildingName;
-    }
-
-    public void setCostructionTime(int timeConstruction){
+        servicesProvided = services;
         constructionTime = timeConstruction;
-    }
-    
-    public void setSize(int buildingSize){
         size = buildingSize;
-    }
-
-    public void setTexture(Texture buildingTexture){
         sprite = buildingTexture;
     }
 
-    public void render(String name, int constructionTime, int size, Texture sprite, SpriteBatch batch){
-        setName(name);
-        setCostructionTime(constructionTime);
-        setSize(size);
-        setTexture(sprite);
-        
+    public String getName() {
+        return name;
+    }
+
+    public Service[] getServicesProvided() {
+        return servicesProvided;
+    }
+
+    public int getConstructionTime() {
+        return constructionTime;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Texture getSprite() {
+        return sprite;
     }
 }

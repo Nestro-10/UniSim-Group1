@@ -3,16 +3,10 @@ public abstract class Event {
     public int duration;
 
 
-    public void Start(){
+    public abstract void Start();
 
-    }
+    public abstract void Update();
 
-    public void Update(){
-
-    }
-
-    public void End(){
-        
-    }
+    public abstract void End();
 
 }
