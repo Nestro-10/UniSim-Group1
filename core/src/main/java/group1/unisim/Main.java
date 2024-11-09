@@ -21,13 +21,13 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
 
     private Texture toolbar, mapTexture, settingsTexture, buildIconTexture;
-    private Texture accomodationTexture, cafe, library;
+    private Texture accommodationTexture, cafe, library;
 
-    private ImageButton accomodationButton;
+    private ImageButton accommodationButton;
     private ImageButton cafeButton;
     private ImageButton libraryButton;
 
-    private boolean showAccomodationSlots = false;
+    private boolean showAccommodationSlots = false;
     private boolean showCafeSlots = false;
     private boolean showLibrarySlots = false;
 
@@ -64,7 +64,7 @@ public class Main extends ApplicationAdapter {
         gameTimeText.setFontScale(4);
         gameTimeText.setAlignment(1);
         stage.addActor(gameTimeText);
-        accomodationTexture = new Texture("accom.png");
+        accommodationTexture = new Texture("accom.png");
         cafe = new Texture("cafe.png");
         library = new Texture("library.png");
 
@@ -76,7 +76,7 @@ public class Main extends ApplicationAdapter {
         buildButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (showAccomodationSlots || showCafeSlots || showLibrarySlots) {
+                if (showAccommodationSlots || showCafeSlots || showLibrarySlots) {
                     hideAllSlots();
                     clearAvailableSlots();
                 } else {
@@ -88,7 +88,7 @@ public class Main extends ApplicationAdapter {
         stage.addActor(buildButton);
         Gdx.input.setInputProcessor(stage);
 
-        accomodationButton = createBuildingButton(accomodationTexture, 130, 720, 70, 70, "accomodation");
+        accommodationButton = createBuildingButton(accommodationTexture, 130, 720, 70, 70, "accommodation");
         cafeButton = createBuildingButton(cafe, 200, 735, 35, 35, "cafe");
         libraryButton = createBuildingButton(library, 240, 720, 70, 70, "library");
 
@@ -97,12 +97,12 @@ public class Main extends ApplicationAdapter {
     }
 
     private void toggleBuildingButtons() {
-        if (!stage.getActors().contains(accomodationButton, true)) {
-            stage.addActor(accomodationButton);
+        if (!stage.getActors().contains(accommodationButton, true)) {
+            stage.addActor(accommodationButton);
             stage.addActor(cafeButton);
             stage.addActor(libraryButton);
         } else {
-            accomodationButton.remove();
+            accommodationButton.remove();
             cafeButton.remove();
             libraryButton.remove();
         }
@@ -128,9 +128,9 @@ public class Main extends ApplicationAdapter {
         hideAllSlots();
 
         switch (buildingType) {
-            case "accomodation":
-                showAccomodationSlots = true;
-                createAvailableSlots(accomodationTexture, 70, 70, "accomodation");
+            case "accommodation":
+                showAccommodationSlots = true;
+                createAvailableSlots(accommodationTexture, 70, 70, "accommodation");
                 break;
             case "cafe":
                 showCafeSlots = true;
@@ -144,7 +144,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void hideAllSlots() {
-        showAccomodationSlots = false;
+        showAccommodationSlots = false;
         showCafeSlots = false;
         showLibrarySlots = false;
     }
@@ -233,7 +233,7 @@ public class Main extends ApplicationAdapter {
         stage.dispose();
         mapTexture.dispose();
         toolbar.dispose();
-        accomodationTexture.dispose();
+        accommodationTexture.dispose();
         settingsTexture.dispose();
         buildIconTexture.dispose();
         cafe.dispose();
