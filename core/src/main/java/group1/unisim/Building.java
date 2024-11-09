@@ -1,40 +1,43 @@
 package group1.unisim;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class Building {
-
     private String name;
-    private Service[] servicesProvided;
-    private int constructionTime;
-    private int size;
     private Texture sprite;
+    private ImageButton buildingButton;
 
-    public Building(String buildingName, Service[] services, int timeConstruction, int buildingSize, Texture buildingTexture){
-        name = buildingName;
-        servicesProvided = services;
-        constructionTime = timeConstruction;
-        size = buildingSize;
-        sprite = buildingTexture;
+    public Building(String name, Texture texture, float width, float height) {
+        this.name = name;
+        this.sprite = texture;
+
+        // Initialize the building as an ImageButton
+        buildingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(texture)));
+        buildingButton.setSize(width, height);
     }
 
-    public String getName() {
-        return name;
+    public void setPosition(float x, float y) {
+        buildingButton.setPosition(x, y);
     }
 
-    public Service[] getServicesProvided() {
-        return servicesProvided;
+    public void addClickListener(ClickListener listener) {
+        buildingButton.addListener(listener);
     }
 
-    public int getConstructionTime() {
-        return constructionTime;
+    public void addToStage(Stage stage) {
+        stage.addActor(buildingButton);
     }
 
-    public int getSize() {
-        return size;
+    public void removeFromStage() {
+        buildingButton.remove();
     }
 
-    public Texture getSprite() {
-        return sprite;
+    public void dispose() {
+        sprite.dispose();
     }
 }
