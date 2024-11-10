@@ -159,6 +159,7 @@ public class Main extends ApplicationAdapter {
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (gameTimer < 0) return;
                 isPaused = !isPaused;
                 if (isPaused) pauseImage.setDrawable(new TextureRegionDrawable(new TextureRegion(pauseTexture)));
                 else pauseImage.setDrawable(new TextureRegionDrawable(new TextureRegion(playTexture)));
@@ -183,16 +184,21 @@ public class Main extends ApplicationAdapter {
             stopPreview();
         }
 
-        updateTimer += deltaTime;
-        if (!isPaused) {
+        if (!isPaused && gameTimer > 0) {
             gameTimer -= deltaTime;
             updateGameTimeText((int)gameTimer);
+            if (gameTimer < 0) {
+                isPaused = true;
+                pauseImage.setDrawable(new TextureRegionDrawable(new TextureRegion(pauseTexture)));
+            }
+
+            updateTimer += deltaTime;
+            while (updateTimer > updateTime) { // in case of a long freeze, able to do multiple updates
+                update();
+                updateTimer -= updateTime;
+            }
         }
 
-        while (updateTimer > updateTime) { // in case of a long freeze, able to do multiple updates
-            update();
-            updateTimer -= updateTime;
-        }
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
