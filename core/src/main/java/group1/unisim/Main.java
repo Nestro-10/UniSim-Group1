@@ -1,20 +1,22 @@
 package group1.unisim;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -23,15 +25,6 @@ public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
 
     private Texture toolbar, mapTexture, settingsTexture, buildIconTexture;
-    private Texture accommodationTexture, cafe, library;
-
-    private ImageButton accommodationButton;
-    private ImageButton cafeButton;
-    private ImageButton libraryButton;
-
-    private boolean showAccommodationSlots = false;
-    private boolean showCafeSlots = false;
-    private boolean showLibrarySlots = false;
 
     private SatisfactionBar satisfactionBar;
     private float updateTimer;
@@ -39,13 +32,18 @@ public class Main extends ApplicationAdapter {
     private boolean isPaused = true;
     private float gameTimer = 300;
 
-    //UI
     private Stage stage;
+
+    //UI
+    private Stage ui;
     private Label gameTimeText;
 
     private ImageButton buildButton;
-    private ArrayList<ImageButton> placedBuildings;
-    private ArrayList<ImageButton> availableSlots;
+    private ScrollPane buildSelect;
+    private ArrayList<BuildingSlot> buildingSlots;
+    private Building buildingPreview = null;
+
+    private HashMap<Service, Label> servicesText;
 
     @Override
     public void create() {
@@ -59,19 +57,16 @@ public class Main extends ApplicationAdapter {
         mapTexture = new Texture("mapTexture.png");
         settingsTexture = new Texture("settingsIcon.png");
         buildIconTexture = new Texture("buildIcon.png");
-        stage = new Stage();
+        ui = new Stage();
 
-        satisfactionBar = new SatisfactionBar(skin, stage);
+        satisfactionBar = new SatisfactionBar(skin, ui);
 
         gameTimeText = new Label("5:00", skin);
         gameTimeText.setPosition(400, 735);
         gameTimeText.setSize(200, 50);
         gameTimeText.setFontScale(4);
         gameTimeText.setAlignment(1);
-        stage.addActor(gameTimeText);
-        accommodationTexture = new Texture("accom.png");
-        cafe = new Texture("cafe.png");
-        library = new Texture("library.png");
+        ui.addActor(gameTimeText);
 
         buildButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(buildIconTexture)));
         buildButton.setPosition(70, 728);
@@ -81,123 +76,59 @@ public class Main extends ApplicationAdapter {
         buildButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (showAccommodationSlots || showCafeSlots || showLibrarySlots) {
-                    hideAllSlots();
-                    clearAvailableSlots();
-                } else {
-                    toggleBuildingButtons();
-                }
+                buildSelect.setVisible(true);
             }
         });
 
-        stage.addActor(buildButton);
-        Gdx.input.setInputProcessor(stage);
-
-        accommodationButton = createBuildingButton(accommodationTexture, 130, 720, 70, 70, "accommodation");
-        cafeButton = createBuildingButton(cafe, 200, 735, 35, 35, "cafe");
-        libraryButton = createBuildingButton(library, 240, 720, 70, 70, "library");
-
-        placedBuildings = new ArrayList<>();
-        availableSlots = new ArrayList<>();
-    }
-
-    private void toggleBuildingButtons() {
-        if (!stage.getActors().contains(accommodationButton, true)) {
-            stage.addActor(accommodationButton);
-            stage.addActor(cafeButton);
-            stage.addActor(libraryButton);
-        } else {
-            accommodationButton.remove();
-            cafeButton.remove();
-            libraryButton.remove();
-        }
-    }
-
-    private ImageButton createBuildingButton(Texture texture, float x, float y, float width, float height, String buildingType) {
-        ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(texture)));
-        button.setPosition(x, y);
-        button.setSize(width, height);
-
-        button.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                clearAvailableSlots();
-                toggleBuildingSlots(buildingType);
-            }
-        });
-
-        return button;
-    }
-
-    private void toggleBuildingSlots(String buildingType) {
-        hideAllSlots();
-
-        switch (buildingType) {
-            case "accommodation":
-                showAccommodationSlots = true;
-                createAvailableSlots(accommodationTexture, 70, 70, "accommodation");
-                break;
-            case "cafe":
-                showCafeSlots = true;
-                createAvailableSlots(cafe, 35, 35, "cafe");
-                break;
-            case "library":
-                showLibrarySlots = true;
-                createAvailableSlots(library, 70, 70, "library");
-                break;
-        }
-    }
-
-    private void hideAllSlots() {
-        showAccommodationSlots = false;
-        showCafeSlots = false;
-        showLibrarySlots = false;
-    }
-
-    private void clearAvailableSlots() {
-        for (ImageButton slotButton : availableSlots) {
-            slotButton.remove();
-        }
-        availableSlots.clear();
-    }
-
-    private void createAvailableSlots(Texture texture, float width, float height, String buildingType) {
-        int[][] slotPositions = {
-            {100, 200}, {200, 250}, {550, 200}, {600, 400}
-
+        int[][] slots = {
+            {100, 200, 2}, {150, 550, 2}, {550, 200, 3}, {600, 400, 2}, {200, 200, 1}, {200, 350, 2}, {550, 300, 3}, {600, 500, 2}
         };
 
-        for (int[] pos : slotPositions) {
-            ImageButton slotButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(texture)));
-            slotButton.setPosition(pos[0], pos[1]);
-            slotButton.setSize(width, height);
-            slotButton.setColor(0, 0, 1, 0.4f);
+        stage = new Stage();
 
-            slotButton.addListener(new ClickListener() {
+        buildingSlots = new ArrayList<>();
+
+        for (int[] slot : slots) {
+            buildingSlots.add(new BuildingSlot(new Vector2(slot[0], slot[1]), slot[2], stage));
+        }
+
+        VerticalGroup buttons = new VerticalGroup();
+
+        for (Building building : contentLoader.allBuildings()) {
+            ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(contentLoader.getTexture(building.getSpriteName()))));
+
+            button.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    placeBuilding(texture, pos[0], pos[1], width, height, buildingType);
-                    slotButton.remove();
+                    preview(building);
+                    buildSelect.setVisible(false);
                 }
             });
 
-            stage.addActor(slotButton);
-            availableSlots.add(slotButton);
+            buttons.addActor(button);
         }
-    }
 
-    private void placeBuilding(Texture texture, float x, float y, float width, float height, String buildingType) {
-        ImageButton buildingButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(texture)));
-        buildingButton.setPosition(x, y);
-        buildingButton.setSize(width, height);
+        buttons.setWidth(10);
 
-        stage.addActor(buildingButton);
-        placedBuildings.add(buildingButton);
+        buildSelect = new ScrollPane(buttons);
+        buildSelect.setPosition(30, 480);
+        buildSelect.setHeight(240);
+        buildSelect.setVisible(false);
+
+
+
+        ui.addActor(buildSelect);
+        ui.addActor(buildButton);
+        Gdx.input.setInputProcessor(new InputMultiplexer(ui, stage));
     }
 
     @Override
     public void render() {
         float deltaTime = Gdx.graphics.getDeltaTime();
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && buildingPreview != null) {
+            stopPreview();
+        }
 
         updateTimer += deltaTime;
         if (!isPaused) {
@@ -220,11 +151,20 @@ public class Main extends ApplicationAdapter {
 
         batch.end();
 
+        stage.act(deltaTime);
         stage.draw();
+
+        ui.act(deltaTime);
+        ui.draw();
     }
 
     private void update() {
         if (isPaused) return;
+
+        for (BuildingSlot slot : buildingSlots){
+            slot.Update();
+        }
+
         satisfactionBar.updateScore();
     }
 
@@ -232,16 +172,29 @@ public class Main extends ApplicationAdapter {
         gameTimeText.setText(String.format("%d:%02d", (seconds / 60), (seconds % 60)));
     }
 
+    private void preview(Building building) {
+        buildingPreview = building;
+        for (BuildingSlot slot : buildingSlots) {
+            slot.setPreview(building);
+        }
+    }
+
+    private void stopPreview() {
+        buildingPreview = null;
+        for (BuildingSlot slot : buildingSlots) {
+            slot.clearPreview();
+        }
+    }
+
     @Override
     public void dispose() {
         batch.dispose();
         stage.dispose();
+        ui.dispose();
         mapTexture.dispose();
         toolbar.dispose();
-        accommodationTexture.dispose();
         settingsTexture.dispose();
         buildIconTexture.dispose();
-        cafe.dispose();
-        library.dispose();
+        contentLoader.dispose();
     }
 }

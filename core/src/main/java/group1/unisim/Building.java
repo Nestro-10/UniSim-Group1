@@ -1,7 +1,5 @@
 package group1.unisim;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public class Building {
 
     private String name;
@@ -36,7 +34,7 @@ public class Building {
         return size;
     }
 
-    public String getSprite() {
+    public String getSpriteName() {
         return sprite;
     }
 }
