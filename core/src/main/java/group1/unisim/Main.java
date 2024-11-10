@@ -24,7 +24,7 @@ public class Main extends ApplicationAdapter {
 
     private SpriteBatch batch;
 
-    private Texture toolbar, mapTexture, settingsTexture, buildIconTexture;
+    private Texture toolbar, mapTexture, settingsTexture, buildIconTexture, pauseTexture, playTexture;
 
     private SatisfactionBar satisfactionBar;
     private float updateTimer;
@@ -45,6 +45,9 @@ public class Main extends ApplicationAdapter {
 
     private HashMap<Service, Label> servicesText;
 
+    private ImageButton pauseButton;
+    private Image pauseImage;
+
     @Override
     public void create() {
         contentLoader = new ContentLoader();
@@ -57,6 +60,8 @@ public class Main extends ApplicationAdapter {
         mapTexture = new Texture("mapTexture.png");
         settingsTexture = new Texture("settingsIcon.png");
         buildIconTexture = new Texture("buildIcon.png");
+        pauseTexture = new Texture("pause.png");
+        playTexture = new Texture("play.png");
         ui = new Stage();
 
         satisfactionBar = new SatisfactionBar(skin, ui);
@@ -143,9 +148,28 @@ public class Main extends ApplicationAdapter {
 
         servicesDisplay.setPosition(300, 760);
 
+        pauseImage = new Image(new TextureRegionDrawable(new TextureRegion(pauseTexture)));
+        pauseImage.setPosition(570, 730);
+        pauseImage.setScale(2f);
+        pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(pauseTexture)));
+        pauseButton.setPosition(570, 730);
+        pauseButton.setScale(2f);
+        pauseButton.setColor(1, 1, 1, 0);
+
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                isPaused = !isPaused;
+                if (isPaused) pauseImage.setDrawable(new TextureRegionDrawable(new TextureRegion(pauseTexture)));
+                else pauseImage.setDrawable(new TextureRegionDrawable(new TextureRegion(playTexture)));
+            }
+        });
+
         ui.addActor(servicesDisplay);
         ui.addActor(buildSelect);
         ui.addActor(buildButton);
+        ui.addActor(pauseImage);
+        ui.addActor(pauseButton);
         Gdx.input.setInputProcessor(new InputMultiplexer(ui, stage));
     }
 
