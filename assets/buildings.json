@@ -14,8 +14,8 @@
             FoodDrink
         ]
         constructionTime: 180
-        size: 2
-        sprite: accom.png
+        size: 1
+        sprite: cafe.png
     }
     lectureHall: {
         name: LectureHall
@@ -24,7 +24,7 @@
         ]
         constructionTime: 180
         size: 2
-        sprite: accom.png
+        sprite: accomlvl1.png // placeholder
     }
     library: {
         name: Library
@@ -33,7 +33,7 @@
         ]
         constructionTime: 180
         size: 2
-        sprite: accom.png
+        sprite: library.png
     }
     rec: {
         name: Rec
@@ -42,6 +42,6 @@
         ]
         constructionTime: 180
         size: 2
-        sprite: accom.png
+        sprite: accom.png // placeholder
     }
 }
