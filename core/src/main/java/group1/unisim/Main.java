@@ -115,8 +115,35 @@ public class Main extends ApplicationAdapter {
         buildSelect.setHeight(240);
         buildSelect.setVisible(false);
 
+        servicesText = new HashMap<>();
 
+        for (Service service : Service.values()) {
+            servicesText.put(service, new Label("0 (0)", skin));
+        }
 
+        Table servicesDisplay = new Table(skin);
+        servicesDisplay.add(new Label("Accommodation", skin));
+        servicesDisplay.add(new Label("Teaching Space", skin));
+        servicesDisplay.add(new Label("Self Study", skin));
+        servicesDisplay.row();
+        servicesDisplay.add(servicesText.get(Service.Accommodation));
+        servicesDisplay.add(servicesText.get(Service.TeachingSpace));
+        servicesDisplay.add(servicesText.get(Service.SelfStudy));
+        servicesDisplay.row();
+        servicesDisplay.add(new Label("Food/Drink", skin));
+        servicesDisplay.add(new Label("Recreation", skin));
+        servicesDisplay.row();
+        servicesDisplay.add(servicesText.get(Service.FoodDrink));
+        servicesDisplay.add(servicesText.get(Service.Recreation));
+
+        for (Cell cell : servicesDisplay.getCells()) {
+            cell.padLeft(10);
+            cell.padTop(5);
+        }
+
+        servicesDisplay.setPosition(300, 760);
+
+        ui.addActor(servicesDisplay);
         ui.addActor(buildSelect);
         ui.addActor(buildButton);
         Gdx.input.setInputProcessor(new InputMultiplexer(ui, stage));
@@ -165,11 +192,31 @@ public class Main extends ApplicationAdapter {
             slot.Update();
         }
 
+        updateServiceCounts();
+
         satisfactionBar.updateScore();
     }
 
     private void updateGameTimeText(int seconds) {
         gameTimeText.setText(String.format("%d:%02d", (seconds / 60), (seconds % 60)));
+    }
+
+    private void updateServiceCounts() {
+        HashMap<Service, Integer> services = new HashMap<>();
+        HashMap<Service, Integer> servicesUnderConstruction = new HashMap<>();
+        for (BuildingSlot slot : buildingSlots){
+            if (slot.getBuilding() == null) continue;
+            for (Service service : slot.getBuilding().getServicesProvided()) {
+                if (slot.isConstructing()) servicesUnderConstruction.merge(service, 1, Integer::sum);
+                else services.merge(service, 1, Integer::sum);
+            }
+        }
+
+        for (Service service : Service.values()) {
+            services.putIfAbsent(service, 0);
+            servicesUnderConstruction.putIfAbsent(service, 0);
+            servicesText.get(service).setText(String.format("%d (%d)", services.get(service), servicesUnderConstruction.get(service)));
+        }
     }
 
     private void preview(Building building) {
