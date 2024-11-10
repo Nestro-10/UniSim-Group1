@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
+    private ContentLoader contentLoader;
+
     private SpriteBatch batch;
 
     private Texture toolbar, mapTexture, settingsTexture, buildIconTexture;
@@ -47,6 +49,9 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        contentLoader = new ContentLoader();
+        contentLoader.Load();
+
         Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         batch = new SpriteBatch();
 

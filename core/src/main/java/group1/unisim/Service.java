@@ -3,5 +3,6 @@ public enum Service {
     Accommodation,
     TeachingSpace,
     SelfStudy,
-    FoodDrink
+    FoodDrink,
+    Recreation
 }

@@ -8,9 +8,11 @@ public class Building {
     private Service[] servicesProvided;
     private int constructionTime;
     private int size;
-    private Texture sprite;
+    private String sprite;
 
-    public Building(String buildingName, Service[] services, int timeConstruction, int buildingSize, Texture buildingTexture){
+    public Building() {}
+
+    public Building(String buildingName, Service[] services, int timeConstruction, int buildingSize, String buildingTexture){
         name = buildingName;
         servicesProvided = services;
         constructionTime = timeConstruction;
@@ -34,7 +36,7 @@ public class Building {
         return size;
     }
 
-    public Texture getSprite() {
+    public String getSprite() {
         return sprite;
     }
 }

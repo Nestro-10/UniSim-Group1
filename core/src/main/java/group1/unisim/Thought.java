@@ -5,6 +5,8 @@ public class Thought {
     private String description;
     private int modification;
 
+    public Thought() {}
+
     public Thought(String _title, String _description, int _modification) {
         title = _title;
         description  = _description;
