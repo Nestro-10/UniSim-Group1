@@ -171,6 +171,8 @@ public class Main extends ApplicationAdapter {
         ui.addActor(pauseImage);
         ui.addActor(pauseButton);
         Gdx.input.setInputProcessor(new InputMultiplexer(ui, stage));
+
+        satisfactionBar.updateScore();
     }
 
     @Override
