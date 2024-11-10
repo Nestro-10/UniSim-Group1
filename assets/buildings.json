@@ -1,0 +1,47 @@
+{
+    accommodation: {
+        name: Accommodation
+        servicesProvided: [
+            Accommodation
+        ]
+        constructionTime: 180
+        size: 2
+        sprite: accom.png
+    }
+    cafe: {
+        name: Cafe
+        servicesProvided: [
+            FoodDrink
+        ]
+        constructionTime: 180
+        size: 1
+        sprite: cafe.png
+    }
+    lectureHall: {
+        name: LectureHall
+        servicesProvided: [
+            TeachingSpace
+        ]
+        constructionTime: 180
+        size: 2
+        sprite: accomlvl1.png // placeholder
+    }
+    library: {
+        name: Library
+        servicesProvided: [
+            SelfStudy
+        ]
+        constructionTime: 180
+        size: 2
+        sprite: library.png
+    }
+    rec: {
+        name: Rec
+        servicesProvided: [
+            Recreation
+        ]
+        constructionTime: 180
+        size: 2
+        sprite: accom.png // placeholder
+    }
+}

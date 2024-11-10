@@ -1,0 +1,22 @@
+{
+    activeConstructions0: {
+        title: ""
+        description: ""
+        modification: 0
+    }
+    activeConstructions1: {
+        title: Active Construction
+        description: ""
+        modification: -5
+    }
+    activeConstructions2: {
+        title: "Active Construction (x2)"
+        description: ""
+        modification: -9
+    }
+    activeConstructions3: {
+        title: "Active Construction (x3)"
+        description: ""
+        modification: -12
+    }
+}
