@@ -35,6 +35,7 @@ public class SatisfactionBar extends ProgressBar {
         targetMarker = new Image(new Texture("triangle.png"));
         setPosition(775, 735);
         targetMarker.setPosition(760, 730);
+        calculateTarget();
         stage.addActor(this);
         stage.addActor(targetMarker);
     }
